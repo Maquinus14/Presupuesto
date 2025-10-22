@@ -1,7 +1,15 @@
-// Variable global del presupuesto
-let presupuesto = 0;
+// =======================
+// VARIABLES GLOBALES
+// =======================
 
-// Función para actualizar el presupuesto
+let presupuesto = 0;
+let gastos = []; // Array global para almacenar los gastos
+let idGasto = 0; // Contador para asignar IDs únicos
+
+// =======================
+// FUNCIONES DE PRESUPUESTO
+// =======================
+
 function actualizarPresupuesto(nuevoValor) {
   if (typeof nuevoValor === "number" && nuevoValor >= 0) {
     presupuesto = nuevoValor;
@@ -12,15 +20,21 @@ function actualizarPresupuesto(nuevoValor) {
   }
 }
 
-// Función para mostrar el presupuesto
 function mostrarPresupuesto() {
   console.log(`Tu presupuesto actual es de ${presupuesto} €`);
+  return presupuesto;
 }
 
-// Función constructora para crear gastos
-function CrearGasto(descripcion, valor) {
+// =======================
+// CONSTRUCTOR DE GASTOS
+// =======================
+
+function CrearGasto(descripcion, valor, fecha, etiquetas = []) {
+  this.id = idGasto++; // ID único incremental
   this.descripcion = descripcion;
   this.valor = typeof valor === "number" && valor >= 0 ? valor : 0;
+  this.fecha = fecha ? new Date(fecha) : new Date();
+  this.etiquetas = Array.isArray(etiquetas) ? etiquetas : [];
 
   // Muestra el gasto
   this.mostrarGasto = function () {
@@ -42,17 +56,87 @@ function CrearGasto(descripcion, valor) {
       console.log("Error: el valor no es válido.");
     }
   };
+
+  // Actualiza la fecha
+  this.actualizarFecha = function (nuevaFecha) {
+    const timestamp = Date.parse(nuevaFecha);
+    if (!isNaN(timestamp)) {
+      this.fecha = new Date(timestamp);
+    } else {
+      console.log("Error: fecha no válida.");
+    }
+  };
+
+  // Añadir etiquetas sin duplicados
+  this.anyadirEtiquetas = function (...nuevasEtiquetas) {
+    nuevasEtiquetas.forEach((etq) => {
+      if (!this.etiquetas.includes(etq)) {
+        this.etiquetas.push(etq);
+      }
+    });
+  };
+
+  // Borrar etiquetas
+  this.borrarEtiquetas = function (...etiquetasABorrar) {
+    this.etiquetas = this.etiquetas.filter(
+      (etq) => !etiquetasABorrar.includes(etq)
+    );
+  };
 }
 
-// Ejemplos para probar el programa
+// =======================
+// FUNCIONES DE GESTIÓN DE GASTOS
+// =======================
+
+// Devuelve el listado completo de gastos
+function listarGastos() {
+  return gastos;
+}
+
+// Añade un gasto al array global
+function anyadirGasto(gasto) {
+  gastos.push(gasto);
+}
+
+// Borra un gasto por su id
+function borrarGasto(id) {
+  gastos = gastos.filter((gasto) => gasto.id !== id);
+}
+
+// Calcula el total de todos los gastos
+function calcularTotalGastos() {
+  return gastos.reduce((total, gasto) => total + gasto.valor, 0);
+}
+
+// Calcula el balance (presupuesto - total de gastos)
+function calcularBalance() {
+  return presupuesto - calcularTotalGastos();
+}
+
+// =======================
+// EXPORTACIÓN (versión ES module)
+// =======================
+export {
+  actualizarPresupuesto,
+  mostrarPresupuesto,
+  CrearGasto,
+  listarGastos,
+  anyadirGasto,
+  borrarGasto,
+  calcularTotalGastos,
+  calcularBalance,
+};
+
+// Ejemplos de uso manual
 actualizarPresupuesto(500);
 mostrarPresupuesto();
 
-let gasto1 = new CrearGasto("Comida", 100);
-gasto1.mostrarGasto();
+let gasto1 = new CrearGasto("Comida", 100, "2025-10-22", ["alimentación"]);
+anyadirGasto(gasto1);
 
-gasto1.actualizarValor(120);
-gasto1.mostrarGasto();
+let gasto2 = new CrearGasto("Transporte", 50);
+anyadirGasto(gasto2);
 
-gasto1.actualizarDescripcion("Cena");
-gasto1.mostrarGasto();
+console.log(listarGastos());
+console.log("Total gastos:", calcularTotalGastos());
+console.log("Balance:", calcularBalance());
