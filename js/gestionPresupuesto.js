@@ -202,7 +202,7 @@ export function filtrarGastos(filtros = {}) {
 
 /**
  * Agrupa los gastos por periodo y etiquetas opcionales
- * @param {string} periodo - "dia", "mes" o "anyo"
+ * @param {string} periodo - "dia", "mes" o "año"
  * @param {Array} etiquetas
  * @param {string} fechaDesde
  * @param {string} fechaHasta
