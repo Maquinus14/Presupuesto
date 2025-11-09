@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es-ES">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="./css/estilos.css" rel="stylesheet" />
+    <title>Gestor de presupuesto</title>
+  </head>
+  <body>
+    <!-- Capas contenedoras para mostrar los datos de la aplicación -->
+    <div id="aplicacion">
+      <div id="total"></div>
+      <div id="formcreacion"></div>
+      <div id="listado"></div>
+    </div>
+
+    <!-- Plantilla HTML del componente Web -->
+    <template id="plantilla-gasto">
+      <style>
+        .gasto {
+          border: 1px solid #ddd;
+          border-radius: 8px;
+          padding: 10px;
+          margin-bottom: 8px;
+          background: #f8f8f8;
+        }
+        .cabecera {
+          display: flex;
+          justify-content: space-between;
+        }
+        .valor {
+          font-weight: bold;
+          color: #007bff;
+        }
+        .etiquetas {
+          font-size: 0.85em;
+          color: #555;
+        }
+        form {
+          display: none;
+          margin-top: 8px;
+        }
+        form.visible {
+          display: block;
+        }
+        input {
+          display: block;
+          margin: 4px 0;
+        }
+        button {
+          margin-right: 5px;
+        }
+      </style>
+
+      <div class="gasto">
+        <div class="cabecera">
+          <div>
+            <div id="descripcion"></div>
+            <div id="fecha"></div>
+            <div id="etiquetas" class="etiquetas"></div>
+          </div>
+          <div id="valor" class="valor"></div>
+        </div>
+
+        <div class="acciones">
+          <button id="editar">Editar</button>
+          <button id="borrar">Borrar</button>
+        </div>
+
+        <form id="formEditar">
+          <input id="fDescripcion" placeholder="Descripción" required />
+          <input id="fValor" type="number" placeholder="Valor" required />
+          <input id="fFecha" type="date" required />
+          <input id="fEtiquetas" placeholder="Separadas por espacios" />
+          <button type="submit">Guardar</button>
+          <button id="cancelar" type="button">Cancelar</button>
+        </form>
+      </div>
+    </template>
+
+    <!-- Carga del script de la versión 2 -->
+    <script type="module" src="./js/gestionPresupuestoWebV2.js"></script>
+  </body>
+</html>
