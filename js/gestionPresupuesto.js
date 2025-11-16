@@ -228,3 +228,19 @@ export function agruparGastos(periodo, etiquetas = [], fechaDesde, fechaHasta) {
   }
   return resultado;
 }
+
+// ===============================
+// NUEVO: REEMPLAZAR LISTADO COMPLETO
+// ===============================
+
+/**
+ * Sustituye completamente el listado de gastos por uno nuevo
+ * @param {Array} nuevoListado
+ */
+export function reemplazarListadoGastos(nuevoListado) {
+  listaGastos = nuevoListado;
+
+  // Recalculamos el siguiente ID correcto
+  siguienteIdGasto =
+    listaGastos.length > 0 ? Math.max(...listaGastos.map((g) => g.id)) + 1 : 0;
+}

@@ -172,6 +172,49 @@ gesGastos.anyadirGasto(
 );
 
 // ===============================
+// GUARDAR EN LOCALSTORAGE
+// ===============================
+document.getElementById("guardarLocal").addEventListener("click", () => {
+  const gastos = gesGastos.listarGastos();
+
+  const json = JSON.stringify(gastos);
+  localStorage.setItem("mis_gastos", json);
+
+  alert("Gastos guardados correctamente en el almacenamiento local.");
+});
+
+// ===============================
+// CARGAR DESDE LOCALSTORAGE
+// ===============================
+document.getElementById("cargarLocal").addEventListener("click", () => {
+  const datos = localStorage.getItem("mis_gastos");
+
+  if (!datos) {
+    alert("No hay datos guardados en localStorage.");
+    return;
+  }
+
+  const listaPlano = JSON.parse(datos);
+
+  const listaReconstruida = listaPlano.map((g) => {
+    let gasto = new gesGastos.CrearGasto(
+      g.descripcion,
+      g.valor,
+      g.fecha,
+      ...g.etiquetas
+    );
+    gasto.id = g.id;
+    return gasto;
+  });
+
+  gesGastos.reemplazarListadoGastos(listaReconstruida);
+
+  pintarGastos();
+
+  alert("Gastos cargados desde almacenamiento local.");
+});
+
+// ===============================
 // Render inicial
 // ===============================
 pintarGastos();
